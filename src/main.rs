@@ -119,13 +119,13 @@
 // 引用和解引用
 
 // 引用的地址在哪，前面不加 * 就是 p 输出内存地址
-fn main() {
-   let x = 5;
-   // 填写空白处
-   let p = &x;
+// fn main() {
+//    let x = 5;
+//    // 填写空白处
+//    let p = &x;
 
-   println!("x 的内存地址是 {:p}", p); // output: 0x2e86b9f7dc
-}
+//    println!("x 的内存地址是 {:p}", p); // output: 0x2e86b9f7dc
+// }
 
 // fn main() {
 //     let x = 5;
@@ -180,3 +180,91 @@ fn main() {
 //     let s = String::from("hello");
 //     s
 // }
+
+// 字符串
+// 切片  左闭右开区间  左边界采用，右边界不采用
+// fn main() {
+//     let s = String::from("hello world");
+//     let len = s.len();
+//     println!("s的长度是{}", len);
+//     let full = &s[..len];
+//     println!("截取完整字符串 {}", full);
+//     println!("s 占用{}字节", std::mem::size_of_val(&s));
+//     // let slice = &s[0..2];  // he
+//     let slice = &s[..2]; // he
+//     println!("s 切片: {}", slice);
+// }
+
+// 数组切片
+// fn main() {
+//     let a = [1, 2, 3, 4, 5, 6];
+//     let slice = &a[1..3];
+//     println!("数组切片后：{:?}", slice);
+// }
+
+// String 和 str 类型的转换
+//  &str => String
+// fn main(){
+//     let s = String::from("hello");
+//     let s1 = "hello".to_string();
+// }
+
+// String => &str
+// fn main() {
+//     // 取引用就可以了
+//     let s = String::from("hello");
+//     say_hello(&s);
+//     say_hello(&s[..]);
+//     say_hello(s.as_str());
+// }
+// fn say_hello(s: &str) {
+//     println!("{}", s);
+// }
+
+// fn main() {
+//     let hello = String::from("中国人");  // 常见的汉字，一个汉字占三个字节，你想截取到“中”，只能按照0 ~ 3切片
+//     let slice = &hello[0..3];
+//     println!("{}", slice);
+// }
+
+// 字符串操作
+// push
+// fn main(){
+//     let mut s = String::from("hello, ");
+//     s.push('r');
+//     println!("追加，push() => {}", s);
+//     s.push_str("ust");
+//     println!("追加rust, push_str => {}", s);
+// }
+
+// insert
+// fn main(){
+//     let mut s = String::from("hello rust");
+//     s.insert(5, ',');
+//     println!("插入字符，insert() -> {}", s);
+//     s.insert_str(6, "i like");
+//     println!("插入字符 i like insert_str() -> {}", s);
+// }
+
+// replace
+// fn main() {
+//     let s = String::from("I like rust. Learning rust is my favorite!");
+//     let new_string_replace = s.replace("rust", "RUST");  // 返回一个新字符串
+//     println!("替换之后, {}", new_string_replace);
+//     let new_string_replacen = s.replacen("rust", "RUST", 1);  // 返回一个新字符串
+//     println!("替换一次之后, {}", new_string_replacen);
+//     let mut s1 = String::from("I like rust. Learning rust is my favorite!");
+//     s1.replace_range(7..8, "R");  // 这个方法直接操作原字符串，所以需要加上mut让原字符串可变
+//     println!("范围替换之后, {}", s1);
+// }
+
+// delete
+// pop
+fn main() {
+    let mut s = String::from("hello 中文");
+    let p1 = s.pop();
+    let p2 = s.pop();
+    println!("截取的第一个, {:?}", p1);
+    println!("截取的第二个, {:?}", p2);
+    println!("结果是，{}", s);
+}
