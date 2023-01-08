@@ -260,11 +260,76 @@
 
 // delete
 // pop
-fn main() {
-    let mut s = String::from("hello 中文");
-    let p1 = s.pop();
-    let p2 = s.pop();
-    println!("截取的第一个, {:?}", p1);
-    println!("截取的第二个, {:?}", p2);
-    println!("结果是，{}", s);
+// fn main() {
+//     let mut s = String::from("hello 中文");
+//     let p1 = s.pop();
+//     let p2 = s.pop();
+//     println!("截取的第一个, {:?}", p1);
+//     println!("截取的第二个, {:?}", p2);
+//     println!("结果是，{}", s);
+// }
+
+// remove
+// fn main(){
+//     let mut string_remove = String::from("测试remove方法");
+//     println!("string_remove 占 {} 个字节", std::mem::size_of_val(string_remove.as_str()));
+//     string_remove.remove(0);  // 删除第一个汉字
+//     // string_remove.remove(1);  // 报错，因为是汉字，并没有删除完整个汉字的字节
+//     string_remove.remove(3);
+//     println!("删除之后的string_remove {}", string_remove);
+// }
+
+// truncate 直接操作原字符串，删除从指定位置开始到结尾的字符串
+// fn main(){
+//     let mut string_remove = String::from("测试remove方法");
+//     string_remove.truncate(3);
+//     println!("使用 truncate() 删除之后的字符串 -> {}", string_remove);
+// }
+
+// clear 删除字符串
+// fn main(){
+//     let mut string_remove = String::from("测试remove方法");
+//     string_remove.clear();
+//     println!("已经删除字符串，{}", string_remove);
+// }
+
+// 连接  使用 + 或者 += 相当于使用了add()  add的第二个参数是引用类型  &str 所以 + 右边也需要使用 &str
+// fn main(){
+//     let string_append = String::from("hello ");
+//     let string_rust = String::from("rust");
+//     let result = string_append + &string_rust;
+//     let mut result = result + "!";
+//     result += "???";
+//     println!("结果为，{}", result);
+// }
+
+// fn main(){
+//     let s1 = String::from("hello");
+//     let s2 = String::from("rust");
+//     let s3 = String::from("!!!");
+//     let s4 = String::from("go");
+//     // 之所以能这么写：s1 + "-" + &s2  返回String类型  之后的String类型再跟 + "-" + &s3，一直循环下去
+//     let s = s1 + "-" + &s2 + "-" + &s3 + "-" + &s4;
+//     println!("拼接结果为：{}", s);
+// }
+
+// format! 拼接字符串，这种方法让我想起了javascripxt es6的字符串拼接  `${hello} world`
+// fn main(){
+//     let s1 = "hello";
+//     let s2 = String::from("rust");
+//     let s = format!("{}, {}!", s1, s2);
+//     println!("使用format拼接出来的结果是：{}", s);
+// }
+
+// 操作UTF-8字符串
+fn main(){
+    for c in "中国人".chars() {
+        println!("{}", c);  // 输出每个字符
+    }
+    for b in "中国人".bytes(){  
+        println!("{}", b);  // 输出底层的字节数组
+    }
+    // 使用utf8_slice库
+    let sliced = utf8_slice::slice("中国人", 1, 2);
+    println!("截取到的字符 {}",sliced);  // 国
 }
