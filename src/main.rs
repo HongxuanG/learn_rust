@@ -329,9 +329,31 @@
 //     for b in "中国人".bytes(){
 //         println!("{}", b);  // 输出底层的字节数组
 //     }
-//     // 使用utf8_slice库
+//     // 借助使用utf8_slice库
 //     let sliced = utf8_slice::slice("中国人", 1, 2);
 //     println!("截取到的字符 {}",sliced);  // 国
+// }
+
+// 元组  相当于ts中的元组，就是一个复杂组合类型
+// fn main() {
+//     // 这就是简单的元组，ts用[]中括号，rust用小括号
+//     let tuple = (600, 4.1, 1);
+//     // 解构赋值  ts也有解构赋值
+//     let (x, y, z) = tuple;
+//     println!("{:?}", tuple);
+//     println!("tuple第一个元素 {}", tuple.0); // ts使用arr[0]来访问第一个元素，而rust使用tuple.0来访问第一个元素
+//     println!("{}, {}, {}", x, y, z);
+// }
+
+// 元组与函数
+// fn main(){
+//     let s = String::from("hello");
+//     let (s1, len) = calculate_length(s);
+//     println!("{}, length -> {}", s1, len);
+// }
+// fn calculate_length(s: String) -> (String, usize){
+//     let len = s.len();
+//     return (s, len);
 // }
 
 // 结构体struct
@@ -367,6 +389,6 @@ struct Point(i32, i32, i32);
 fn main(){
     let black = Color(0,0,0);
     let origin = Point(0,0,0);
-
 }
+
 // 单元结构体
