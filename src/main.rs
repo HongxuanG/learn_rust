@@ -322,14 +322,51 @@
 // }
 
 // 操作UTF-8字符串
+// fn main(){
+//     for c in "中国人".chars() {
+//         println!("{}", c);  // 输出每个字符
+//     }
+//     for b in "中国人".bytes(){
+//         println!("{}", b);  // 输出底层的字节数组
+//     }
+//     // 使用utf8_slice库
+//     let sliced = utf8_slice::slice("中国人", 1, 2);
+//     println!("截取到的字符 {}",sliced);  // 国
+// }
+
+// 结构体struct
+// #[derive(Debug)]
+// struct User {
+//     active: bool,
+//     username: String,
+//     email: String,
+//     sign_in_count: u64,
+// }
+// fn create_user(username: String, email: String) -> User {
+//     User {
+//         username,
+//         email,
+//         active: true,
+//         sign_in_count: 1,
+//     }
+// }
+// fn main() {
+//     let user = create_user(String::from("xuan"), String::from("17324565534@qq.com"));
+//     let user1 = User {
+//         email: String::from("12345678910@qq.com"),
+//         ..user
+//     };
+//     // 报错，因为user的所有权被转移给了user1
+//     // println!("user，{:?}", user);
+//     println!("user1，{:?}", user1);
+// }
+
+// 元组结构体
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
 fn main(){
-    for c in "中国人".chars() {
-        println!("{}", c);  // 输出每个字符
-    }
-    for b in "中国人".bytes(){  
-        println!("{}", b);  // 输出底层的字节数组
-    }
-    // 使用utf8_slice库
-    let sliced = utf8_slice::slice("中国人", 1, 2);
-    println!("截取到的字符 {}",sliced);  // 国
+    let black = Color(0,0,0);
+    let origin = Point(0,0,0);
+
 }
+// 单元结构体
