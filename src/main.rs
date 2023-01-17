@@ -380,15 +380,128 @@
 //     };
 //     // 报错，因为user的所有权被转移给了user1
 //     // println!("user，{:?}", user);
-//     println!("user1，{:?}", user1);
+//     println!("user1，{:#?}", user1);
 // }
 
 // 元组结构体
-struct Color(i32, i32, i32);
-struct Point(i32, i32, i32);
-fn main(){
-    let black = Color(0,0,0);
-    let origin = Point(0,0,0);
-}
+// struct Color(i32, i32, i32);
+// struct Point(i32, i32, i32);
+// fn main(){
+//     let black = Color(0,0,0);
+//     let origin = Point(0,0,0);
+// }
 
 // 单元结构体
+// struct AlwaysEqual;
+// fn main(){
+//     let subject = AlwaysEqual;
+
+// }
+// impl SomeTrait for AlwaysEqual {
+
+// }
+
+// dbg!宏  能够让我们看到输出的东西就像js的console.log 能显示行数
+// #[derive(Debug)]
+// struct Rectangle{
+//     width: u32,
+//     height: u32
+// }
+// fn main(){
+//     let scale = 2;
+//     let rect1 = Rectangle{
+//         width: dbg!(30 * scale),
+//         height: 50
+//     };
+//     dbg!(&rect1);
+// }
+
+// 枚举
+// #[derive(Debug)]
+// enum PokerSuit {
+//     Hearts,
+//     Clubs,
+//     Diamonds,
+//     Spades
+// }
+// fn main(){
+//     let heart = PokerSuit::Hearts;
+//     let diamond = PokerSuit::Diamonds;
+//     println!("打印Heart，{:?}, {:?}", heart, diamond);
+// }
+
+// 有时候枚举也需要指定值，只不过这个值可以变，但是类型不能变
+// enum PokerCard {
+//     Hearts(u8),
+//     Clubs(u8),
+//     Diamonds(char),
+//     Spades(char),
+// }
+// fn main() {
+//     let c1 = PokerCard::Hearts(5);
+//     let c2 = PokerCard::Diamonds('A');
+// }
+
+// 枚举甚至能包含字符串 结构体 数值甚至是另一个枚举
+// enum Message {
+//     Quit,
+//     Move {
+//         x: i32,
+//         y: i32
+//     },
+//     Write(String),
+//     ChangeColor(i32, i32, i32)
+// }
+// fn main(){
+//     let m1 = Message::Quit;
+//     let m2 = Message::Move { x: 1, y: 2 };
+//     let m3 = Message::ChangeColor(255, 255, 0);
+// }
+
+// js有null 那rust呢？  rust有some和none
+// fn main(){
+//     let some_number = Some(5);
+//     let some_string = Some("a String");
+//     let none: Option<i32> = None;
+// }
+
+// js中当一个变量可能为空时我们需要处理为空的情况
+/*
+    a ? a : b
+    a ?? b
+    if (a) {
+        return a
+    }else{
+        return b
+    }
+*/
+// 而在rust中只要类型时Option<T>就一定要处理可能为空的情况，不是Option<T>类型你可以放心的认为它是安全的
+// 我们可以使用模式匹配 match 相当于我们js的switch
+// match的作用就是 类型是Some<T> 执行这个  类型为None  执行那个
+fn plus_one(x: Option<i32>) -> Option<i32>{
+    // plus_one 通过 match 来处理不同 Option 的情况。
+    // 第一种写法
+    // match x {
+    //     None => {
+    //         return None
+    //     },
+    //     Some(i) => {
+    //         return Some(i + 1)
+    //     }
+    // }
+    // 第两种写法
+    // match x {
+    //     None => None,
+    //     Some(i) => Some(i + 1)
+    // }
+    return match x {
+        None => None,
+        Some(i) => Some(i + 1)
+    }
+}
+fn main(){
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+    println!("six and none, {:?}, {:?}", six, none);
+}
