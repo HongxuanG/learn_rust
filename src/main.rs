@@ -478,30 +478,96 @@
 // 而在rust中只要类型时Option<T>就一定要处理可能为空的情况，不是Option<T>类型你可以放心的认为它是安全的
 // 我们可以使用模式匹配 match 相当于我们js的switch
 // match的作用就是 类型是Some<T> 执行这个  类型为None  执行那个
-fn plus_one(x: Option<i32>) -> Option<i32>{
-    // plus_one 通过 match 来处理不同 Option 的情况。
-    // 第一种写法
-    // match x {
-    //     None => {
-    //         return None
-    //     },
-    //     Some(i) => {
-    //         return Some(i + 1)
-    //     }
-    // }
-    // 第两种写法
-    // match x {
-    //     None => None,
-    //     Some(i) => Some(i + 1)
-    // }
-    return match x {
-        None => None,
-        Some(i) => Some(i + 1)
+// fn plus_one(x: Option<i32>) -> Option<i32>{
+//     // plus_one 通过 match 来处理不同 Option 的情况。
+//     // 第一种写法
+//     // match x {
+//     //     None => {
+//     //         return None
+//     //     },
+//     //     Some(i) => {
+//     //         return Some(i + 1)
+//     //     }
+//     // }
+//     // 第两种写法
+//     // match x {
+//     //     None => None,
+//     //     Some(i) => Some(i + 1)
+//     // }
+//     return match x {
+//         None => None,
+//         Some(i) => Some(i + 1)
+//     }
+// }
+// fn main(){
+//     let five = Some(5);
+//     let six = plus_one(five);
+//     let none = plus_one(None);
+//     println!("six and none, {:?}, {:?}", six, none);
+// }
+
+// 数组
+// 数组有两种 长度固定的array 就像 ts的tuple
+// 另一种是长度能伸缩的Vector 就像 ts的array
+// 都是高级类型  考虑所有权问题
+// fn main() {
+//     // array  [类型; 数组长度]
+//     let a = [1, 2, 3, 4, 5];
+//     // 还能用简洁的语法初始化数组
+//     let b = [3; 4];    // 等同于[3,3,3,3]
+
+//     // 访问数组也和js的一样
+//     let first = a[0];
+//     let second = b[1];
+// }
+
+// use std::io;
+
+// fn main() {
+//     let a = [1, 2, 3, 4, 5, 6];
+//     println!("请输入数组索引值");
+//     let mut index = String::new();
+//     // 读取用户输入的索引值
+//     io::stdin().read_line(&mut index).expect("读行失败");
+//     let index: usize = index.trim().parse().expect("输入的索引值不是数字");
+//     let element = a[index];
+//     println!("获取到的索引值和元素是, {}, {}", index, element)
+// }
+
+// fn main(){
+//     // 报错
+//     // let array = [String::from("rust is future");2];
+//     // let array = [3;5]; 是通过不断地copy出来的，前面也提到基本类型可以copy，复杂类型不行
+//     // 所以[String::from("rust is future"); 2] 会报错
+//     // 正确做法：使用 core::array::from_fn
+//     let array: [String; 8] = core::array::from_fn(|i| String::from("rust is future"));
+//     println!("{:?}", array);
+// }
+
+// 数组切片
+// fn main() {
+//     let a = [1, 2, 3, 4, 5];
+//     let slice = &a[1..3];
+//     assert_eq!(slice, &[2,3])
+// }
+
+// 数组的实际应用
+fn main() {
+    let one = [1, 2, 3];
+    let two: [u8; 3] = [1, 2, 3];
+    let blank1 = [0; 3];
+    let blank2: [u8; 3] = [0; 3];
+    // 二维数组
+    let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
+    for a in arrays {
+        print!("{:?}:", a);
+        for n in a {
+            print!("\t{} + 10 = {}", n, n + 10);
+        }
+        let mut sum = 0;
+        for i in 0..a.len() {
+            sum += a[i];
+        }
+        println!("\t({:?}) = {}", a, sum);
     }
-}
-fn main(){
-    let five = Some(5);
-    let six = plus_one(five);
-    let none = plus_one(None);
-    println!("six and none, {:?}, {:?}", six, none);
 }
