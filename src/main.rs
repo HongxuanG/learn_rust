@@ -572,24 +572,111 @@
 //     }
 // }
 
+// use std::{io, cmp::Ordering};
+
+// use rand::Rng;
+
+// // 猜数游戏
+// fn main(){
+//     println!("请输入一个数字与神秘数字比较，判断win或者fail");
+//     let secret_number = rand::thread_rng().gen_range(0, 100);
+//     println!("这个神秘数字, {}", secret_number);
+//     let mut guess = String::new();
+//     io::stdin().read_line(&mut guess).expect("无法读行");
+//     println!("你猜测的数字为：{}", &guess);
+//     let guess: u32 = guess.trim().parse().expect("转换为数字失败");
+    
+//     match guess.cmp(&secret_number) {
+//         Ordering::Less => println!("you loss"),
+//         Ordering::Greater => println!("you win"),
+//         Ordering::Equal => println!("equal")
+//     } 
+
+// }
+
+
+
+// for 循环
+// fn main() {
+//     let a = [4,3,2,1];
+//     // 获取元素的索引  enumerate 返回 （索引，元素值）
+//     for (i, v) in a.iter().enumerate() {
+//         println!("当前元素索引值 {}，值 {}", i, v);
+//     }
+//     // 只是想循环10次又不想创建一个长度是10的数组怎么办呢？
+//     // 在 Rust 中 _ 的含义是忽略该值或者类型的意思
+//     // 0..10 是闭开区间   0..=10是闭区间   包含 0 和 10
+//     for _ in 0..=10 {
+//         println!("该信息将会打印10次");
+//     }
+// }
+
+// while循环
+// fn main(){
+//     let mut a = 0;
+//     while a <= 5 {
+//         println!("while循环 {}", a);
+//         a += 1;
+//     }
+//     println!("while循环结束");
+// }
+
+// loop循环
+// fn main() {
+//     let mut n: u128 = 0;
+//     // 死循环  用break打断
+//     loop {
+//         // if n > 5 {
+//         //     break;
+//         // }
+//         println!("{}", n);
+//         n += 1000000000;
+//     }
+//     // println!("我出来了");
+// }
+
+// loop循环的特殊
+// fn main() {
+//     let mut counter = 0;
+//     // loop本身也是个表达式，所以可以再等号右边书写
+//     let result = loop {
+//         counter += 1;
+//         if counter == 10 {
+//             // break 和 js的break不一样，break后面还能跟一个表达式 代表 return [表达式]的意思
+//             break counter * 2;
+//         }
+//     };
+//     println!("result is: {}", result);
+// }
+
 use std::{io, cmp::Ordering};
 
 use rand::Rng;
 
-// 猜数游戏
-fn main(){
+// 多次猜数游戏
+fn main() {
     println!("请输入一个数字与神秘数字比较，判断win或者fail");
     let secret_number = rand::thread_rng().gen_range(0, 100);
     println!("这个神秘数字, {}", secret_number);
-    let mut guess = String::new();
-    io::stdin().read_line(&mut guess).expect("无法读行");
-    println!("你猜测的数字为：{}", &guess);
-    let guess: u32 = guess.trim().parse().expect("转换为数字失败");
-    
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("you loss"),
-        Ordering::Greater => println!("you win"),
-        Ordering::Equal => println!("equal")
-    } 
-
+    loop {
+        let mut guess = String::new();
+        io::stdin().read_line(&mut guess).expect("无法读行");
+        println!("你猜测的数字为：{}", &guess);
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("无效数字，请重新猜测......");
+                continue
+            }
+        };
+        
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("猜测的数字太小了，请重新猜测......"),
+            Ordering::Greater => println!("猜测的数字太大了，请重新猜测......"),
+            Ordering::Equal => {
+                println!("你赢了！");
+                break;
+            }
+        } 
+    }
 }
