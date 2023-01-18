@@ -476,12 +476,12 @@
     }
 */
 // 而在rust中只要类型时Option<T>就一定要处理可能为空的情况，不是Option<T>类型你可以放心的认为它是安全的
-// 我们可以使用模式匹配 match 相当于我们js的switch
+// 我们可以使用模式匹配 match guess.cmp(&secret_number) {} 相当于我们js的switch
 // match的作用就是 类型是Some<T> 执行这个  类型为None  执行那个
 // fn plus_one(x: Option<i32>) -> Option<i32>{
-//     // plus_one 通过 match 来处理不同 Option 的情况。
+//     // plus_one 通过 match guess.cmp(&secret_number) {} 来处理不同 Option 的情况。
 //     // 第一种写法
-//     // match x {
+//     // match guess.cmp(&secret_number) {} x {
 //     //     None => {
 //     //         return None
 //     //     },
@@ -490,7 +490,7 @@
 //     //     }
 //     // }
 //     // 第两种写法
-//     // match x {
+//     // match guess.cmp(&secret_number) {} x {
 //     //     None => None,
 //     //     Some(i) => Some(i + 1)
 //     // }
@@ -552,22 +552,44 @@
 // }
 
 // 数组的实际应用
-fn main() {
-    let one = [1, 2, 3];
-    let two: [u8; 3] = [1, 2, 3];
-    let blank1 = [0; 3];
-    let blank2: [u8; 3] = [0; 3];
-    // 二维数组
-    let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
-    for a in arrays {
-        print!("{:?}:", a);
-        for n in a {
-            print!("\t{} + 10 = {}", n, n + 10);
-        }
-        let mut sum = 0;
-        for i in 0..a.len() {
-            sum += a[i];
-        }
-        println!("\t({:?}) = {}", a, sum);
-    }
+// fn main() {
+//     let one = [1, 2, 3];
+//     let two: [u8; 3] = [1, 2, 3];
+//     let blank1 = [0; 3];
+//     let blank2: [u8; 3] = [0; 3];
+//     // 二维数组
+//     let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
+//     for a in arrays {
+//         print!("{:?}:", a);
+//         for n in a {
+//             print!("\t{} + 10 = {}", n, n + 10);
+//         }
+//         let mut sum = 0;
+//         for i in 0..a.len() {
+//             sum += a[i];
+//         }
+//         println!("\t({:?}) = {}", a, sum);
+//     }
+// }
+
+use std::{io, cmp::Ordering};
+
+use rand::Rng;
+
+// 猜数游戏
+fn main(){
+    println!("请输入一个数字与神秘数字比较，判断win或者fail");
+    let secret_number = rand::thread_rng().gen_range(0, 100);
+    println!("这个神秘数字, {}", secret_number);
+    let mut guess = String::new();
+    io::stdin().read_line(&mut guess).expect("无法读行");
+    println!("你猜测的数字为：{}", &guess);
+    let guess: u32 = guess.trim().parse().expect("转换为数字失败");
+    
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("you loss"),
+        Ordering::Greater => println!("you win"),
+        Ordering::Equal => println!("equal")
+    } 
+
 }
