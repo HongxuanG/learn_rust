@@ -401,6 +401,48 @@
 
 // }
 
+// 结构体的方法  struct 的方法
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    length: u32
+}
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.length
+    }
+    fn can_hold(&self, other_rect: Rectangle) -> bool {
+        self.width > other_rect.width && self.length > other_rect.length
+    }
+    // 这里定义一个关联函数
+    fn square(size: u32) -> Rectangle {
+        Rectangle { width: size, length: size }
+    }
+}
+fn main() {
+    let origin = Rectangle {
+        width: 100,
+        length: 100
+    };
+    let origin_area = origin.area();
+    println!("area: {}", origin_area);
+    let r1 = Rectangle {
+        width: 10,
+        length: 10
+    };
+    let r2 = Rectangle {
+        width: 200,
+        length: 200
+    };
+    println!("origin 能不能容纳 r1：{}", origin.can_hold(r1));
+    println!("origin 能不能容纳 r2：{}", origin.can_hold(r2));
+    // 通过struct 的 关联函数创建了一个正方形
+    let s = Rectangle::square(300);
+    println!("square: {:#?}", s);
+}
+
+
+
 // dbg!宏  能够让我们看到输出的东西就像js的console.log 能显示行数
 // #[derive(Debug)]
 // struct Rectangle{
@@ -649,34 +691,34 @@
 //     println!("result is: {}", result);
 // }
 
-use std::{io, cmp::Ordering};
+// use std::{io, cmp::Ordering};
 
-use rand::Rng;
+// use rand::Rng;
 
-// 多次猜数游戏
-fn main() {
-    println!("请输入一个数字与神秘数字比较，判断win或者fail");
-    let secret_number = rand::thread_rng().gen_range(0, 100);
-    println!("这个神秘数字, {}", secret_number);
-    loop {
-        let mut guess = String::new();
-        io::stdin().read_line(&mut guess).expect("无法读行");
-        println!("你猜测的数字为：{}", &guess);
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                println!("无效数字，请重新猜测......");
-                continue
-            }
-        };
+// // 多次猜数游戏
+// fn main() {
+//     println!("请输入一个数字与神秘数字比较，判断win或者fail");
+//     let secret_number = rand::thread_rng().gen_range(0, 100);
+//     println!("这个神秘数字, {}", secret_number);
+//     loop {
+//         let mut guess = String::new();
+//         io::stdin().read_line(&mut guess).expect("无法读行");
+//         println!("你猜测的数字为：{}", &guess);
+//         let guess: u32 = match guess.trim().parse() {
+//             Ok(num) => num,
+//             Err(_) => {
+//                 println!("无效数字，请重新猜测......");
+//                 continue
+//             }
+//         };
         
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("猜测的数字太小了，请重新猜测......"),
-            Ordering::Greater => println!("猜测的数字太大了，请重新猜测......"),
-            Ordering::Equal => {
-                println!("你赢了！");
-                break;
-            }
-        } 
-    }
-}
+//         match guess.cmp(&secret_number) {
+//             Ordering::Less => println!("猜测的数字太小了，请重新猜测......"),
+//             Ordering::Greater => println!("猜测的数字太大了，请重新猜测......"),
+//             Ordering::Equal => {
+//                 println!("你赢了！");
+//                 break;
+//             }
+//         } 
+//     }
+// }
