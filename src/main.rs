@@ -402,44 +402,44 @@
 // }
 
 // 结构体的方法  struct 的方法
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    length: u32
-}
-impl Rectangle {
-    fn area(&self) -> u32 {
-        self.width * self.length
-    }
-    fn can_hold(&self, other_rect: Rectangle) -> bool {
-        self.width > other_rect.width && self.length > other_rect.length
-    }
-    // 这里定义一个关联函数
-    fn square(size: u32) -> Rectangle {
-        Rectangle { width: size, length: size }
-    }
-}
-fn main() {
-    let origin = Rectangle {
-        width: 100,
-        length: 100
-    };
-    let origin_area = origin.area();
-    println!("area: {}", origin_area);
-    let r1 = Rectangle {
-        width: 10,
-        length: 10
-    };
-    let r2 = Rectangle {
-        width: 200,
-        length: 200
-    };
-    println!("origin 能不能容纳 r1：{}", origin.can_hold(r1));
-    println!("origin 能不能容纳 r2：{}", origin.can_hold(r2));
-    // 通过struct 的 关联函数创建了一个正方形
-    let s = Rectangle::square(300);
-    println!("square: {:#?}", s);
-}
+// #[derive(Debug)]
+// struct Rectangle {
+//     width: u32,
+//     length: u32
+// }
+// impl Rectangle {
+//     fn area(&self) -> u32 {
+//         self.width * self.length
+//     }
+//     fn can_hold(&self, other_rect: Rectangle) -> bool {
+//         self.width > other_rect.width && self.length > other_rect.length
+//     }
+//     // 这里定义一个关联函数
+//     fn square(size: u32) -> Rectangle {
+//         Rectangle { width: size, length: size }
+//     }
+// }
+// fn main() {
+//     let origin = Rectangle {
+//         width: 100,
+//         length: 100
+//     };
+//     let origin_area = origin.area();
+//     println!("area: {}", origin_area);
+//     let r1 = Rectangle {
+//         width: 10,
+//         length: 10
+//     };
+//     let r2 = Rectangle {
+//         width: 200,
+//         length: 200
+//     };
+//     println!("origin 能不能容纳 r1：{}", origin.can_hold(r1));
+//     println!("origin 能不能容纳 r2：{}", origin.can_hold(r2));
+//     // 通过struct 的 关联函数创建了一个正方形
+//     let s = Rectangle::square(300);
+//     println!("square: {:#?}", s);
+// }
 
 
 
@@ -547,6 +547,18 @@ fn main() {
 //     let none = plus_one(None);
 //     println!("six and none, {:?}, {:?}", six, none);
 // }
+
+
+// 联想一下switch 里面的default 如果所有的模式都不匹配的话那怎么办呢？
+fn main(){
+    let a = 0u8;
+    match a {
+        1 => println!("1"),
+        3 => println!("2"),
+        5 => println!("5"),
+        _ => ()   // _下划线通配符 指的是 js里面的switch 的 default  所有模式都不匹配就走 _ 下划线
+    }
+}
 
 // 数组
 // 数组有两种 长度固定的array 就像 ts的tuple
