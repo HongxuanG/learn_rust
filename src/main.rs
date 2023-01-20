@@ -550,15 +550,45 @@
 
 
 // 联想一下switch 里面的default 如果所有的模式都不匹配的话那怎么办呢？
-fn main(){
-    let a = 0u8;
-    match a {
-        1 => println!("1"),
-        3 => println!("2"),
-        5 => println!("5"),
-        _ => ()   // _下划线通配符 指的是 js里面的switch 的 default  所有模式都不匹配就走 _ 下划线
-    }
+// fn main(){
+//     let a = 0u8;
+//     match a {
+//         1 => println!("1"),
+//         3 => println!("2"),
+//         5 => println!("5"),
+//         _ => ()   // _下划线通配符 指的是 js里面的switch 的 default  所有模式都不匹配就走 _ 下划线
+//     }
+// }
+
+// if let
+// fn main() {
+//     let a = 1;
+//     // 想判断a的情况去做某种事情
+//     // 用match去写太罗嗦了
+//     // match a {
+//     //     1 => println!("1"),
+//     //     _ => ()
+//     // }
+//     // 用if let去写反而简洁一点
+//     if let 1 = a {
+//         println!("1");
+//     }
+// }
+
+// matches! 宏  两个参数 返回bool  布尔值 true 和 false  判断两个参数是否匹配
+#[derive(Debug)]
+enum MyEnum {
+    Foo,
+    Bar
 }
+fn main() {
+    let mut v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
+    // let target_vec = v.iter().filter(|x| x == MyEnum::Foo);
+    let target_vec = v.iter().filter(|x| matches!(x, MyEnum::Foo));
+    // 这里的 filter 有点像 js 的 es6 里面的 filter((item, index) => { return item === MyEnum['Foo'] })
+    println!("{:?}", target_vec);
+}
+
 
 // 数组
 // 数组有两种 长度固定的array 就像 ts的tuple
