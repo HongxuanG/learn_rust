@@ -586,6 +586,46 @@
 //     println!("{:?}", target_vec);
 // }
 
+// 匹配守卫   match guard  说白了就是模式匹配后面额外的if 判断  同一个模式下的不同条件
+// fn main() {
+//     let num = Some(4);
+//     match num {
+//         Some(x) if x < 5 => println!("x 小于 5"),   // 输出 x 小于 5
+//         Some(x) => println!("{}", x),
+//         None => ()
+//     }
+// }
+
+// 匹配守卫和 | 或运算符的优先级    | 或优先级 > 匹配守卫优先级
+// fn main() {
+//     const X: i32 = 4;
+//     const Y: bool = true;
+//     match X {
+//         // 这里的意思是：X 要在 4,5,6这个范围内，并且 Y 要为 true
+//         4 | 5 | 6 if Y => println!("匹配成功"),
+//         _ => println!("匹配失败")
+//     }
+// }
+
+// 匹配中的 @ 绑定 作用就是能够限制某一个字段的匹配范围
+fn main() {
+    enum Message {
+        Hello {
+            id: i32
+        }
+    }
+    let msg = Message::Hello { id: 5 };
+    match msg {
+        // id被限制在 4 ~ 6之间并且它还绑定了一个变量给内部的作用域使用：id_variable
+        Message::Hello { id: id_variable @ 4..=6 } => println!("匹配到的id是{}", id_variable),
+        // id被限制在了 7~10 之间
+        Message::Hello { id: 7..=10 } => println!("可能会匹配到 7到10范围的id"),
+        // id 并没有限制任何范围，什么值都能匹配到
+        Message::Hello { id: _ } => println!("怎么都可以匹配到id")
+    }
+}
+
+
 // 数组
 // 数组有两种 长度固定的array 就像 ts的tuple
 // 另一种是长度能伸缩的Vector 就像 ts的array
@@ -653,15 +693,15 @@
 // }
 
 // 数组的解构赋值
-fn main() {
-    let arr = &[111, 323];
-    if let [x, ..] = arr {
-        assert_eq!(x, &111);
-    }
-    if let &[.., y] = arr {
-        assert_eq!(y, 323);
-    }
-}
+// fn main() {
+//     let arr = &[111, 323];
+//     if let [x, ..] = arr {
+//         assert_eq!(x, &111);
+//     }
+//     if let &[.., y] = arr {
+//         assert_eq!(y, 323);
+//     }
+// }
 
 // use std::{io, cmp::Ordering};
 
