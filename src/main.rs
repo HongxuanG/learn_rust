@@ -441,8 +441,6 @@
 //     println!("square: {:#?}", s);
 // }
 
-
-
 // dbg!宏  能够让我们看到输出的东西就像js的console.log 能显示行数
 // #[derive(Debug)]
 // struct Rectangle{
@@ -548,7 +546,6 @@
 //     println!("six and none, {:?}, {:?}", six, none);
 // }
 
-
 // 联想一下switch 里面的default 如果所有的模式都不匹配的话那怎么办呢？
 // fn main(){
 //     let a = 0u8;
@@ -576,19 +573,18 @@
 // }
 
 // matches! 宏  两个参数 返回bool  布尔值 true 和 false  判断两个参数是否匹配
-#[derive(Debug)]
-enum MyEnum {
-    Foo,
-    Bar
-}
-fn main() {
-    let mut v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
-    // let target_vec = v.iter().filter(|x| x == MyEnum::Foo);
-    let target_vec = v.iter().filter(|x| matches!(x, MyEnum::Foo));
-    // 这里的 filter 有点像 js 的 es6 里面的 filter((item, index) => { return item === MyEnum['Foo'] })
-    println!("{:?}", target_vec);
-}
-
+// #[derive(Debug)]
+// enum MyEnum {
+//     Foo,
+//     Bar
+// }
+// fn main() {
+//     let mut v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
+//     // let target_vec = v.iter().filter(|x| x == MyEnum::Foo);
+//     let target_vec = v.iter().filter(|x| matches!(x, MyEnum::Foo));
+//     // 这里的 filter 有点像 js 的 es6 里面的 filter((item, index) => { return item === MyEnum['Foo'] })
+//     println!("{:?}", target_vec);
+// }
 
 // 数组
 // 数组有两种 长度固定的array 就像 ts的tuple
@@ -656,6 +652,17 @@ fn main() {
 //     }
 // }
 
+// 数组的解构赋值
+fn main() {
+    let arr = &[111, 323];
+    if let [x, ..] = arr {
+        assert_eq!(x, &111);
+    }
+    if let &[.., y] = arr {
+        assert_eq!(y, 323);
+    }
+}
+
 // use std::{io, cmp::Ordering};
 
 // use rand::Rng;
@@ -669,16 +676,14 @@ fn main() {
 //     io::stdin().read_line(&mut guess).expect("无法读行");
 //     println!("你猜测的数字为：{}", &guess);
 //     let guess: u32 = guess.trim().parse().expect("转换为数字失败");
-    
+
 //     match guess.cmp(&secret_number) {
 //         Ordering::Less => println!("you loss"),
 //         Ordering::Greater => println!("you win"),
 //         Ordering::Equal => println!("equal")
-//     } 
+//     }
 
 // }
-
-
 
 // for 循环
 // fn main() {
@@ -753,7 +758,7 @@ fn main() {
 //                 continue
 //             }
 //         };
-        
+
 //         match guess.cmp(&secret_number) {
 //             Ordering::Less => println!("猜测的数字太小了，请重新猜测......"),
 //             Ordering::Greater => println!("猜测的数字太大了，请重新猜测......"),
@@ -761,6 +766,6 @@ fn main() {
 //                 println!("你赢了！");
 //                 break;
 //             }
-//         } 
+//         }
 //     }
 // }
