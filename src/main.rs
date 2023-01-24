@@ -608,23 +608,22 @@
 // }
 
 // 匹配中的 @ 绑定 作用就是能够限制某一个字段的匹配范围
-fn main() {
-    enum Message {
-        Hello {
-            id: i32
-        }
-    }
-    let msg = Message::Hello { id: 5 };
-    match msg {
-        // id被限制在 4 ~ 6之间并且它还绑定了一个变量给内部的作用域使用：id_variable
-        Message::Hello { id: id_variable @ 4..=6 } => println!("匹配到的id是{}", id_variable),
-        // id被限制在了 7~10 之间
-        Message::Hello { id: 7..=10 } => println!("可能会匹配到 7到10范围的id"),
-        // id 并没有限制任何范围，什么值都能匹配到
-        Message::Hello { id: _ } => println!("怎么都可以匹配到id")
-    }
-}
-
+// fn main() {
+//     enum Message {
+//         Hello {
+//             id: i32
+//         }
+//     }
+//     let msg = Message::Hello { id: 5 };
+//     match msg {
+//         // id被限制在 4 ~ 6之间并且它还绑定了一个变量给内部的作用域使用：id_variable
+//         Message::Hello { id: id_variable @ 4..=6 } => println!("匹配到的id是{}", id_variable),
+//         // id被限制在了 7~10 之间
+//         Message::Hello { id: 7..=10 } => println!("可能会匹配到 7到10范围的id"),
+//         // id 并没有限制任何范围，什么值都能匹配到
+//         Message::Hello { id: _ } => println!("怎么都可以匹配到id")
+//     }
+// }
 
 // 数组
 // 数组有两种 长度固定的array 就像 ts的tuple
@@ -809,3 +808,141 @@ fn main() {
 //         }
 //     }
 // }
+
+// 泛型
+// fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> T {
+//     let mut largest = list[0];
+//     for &item in list.iter() {
+//         if item > largest {
+//             largest = item;
+//         }
+//     }
+//     largest
+// }
+// fn main() {
+//     let number_list = vec![32,43,54,65,87,91,22];
+//     let largest1 = largest(&number_list);
+//     println!("最大的数字是{}", largest1);
+// }
+
+// fn add<T: std::ops::Add<Output = T>>(a: T, b: T) -> T {
+//     a + b
+// }
+// fn main() {
+//     let a = 33;
+//     let b = 22;
+//     let result = add(a,b);
+//     println!("相加的结果是{}", result);
+// }
+
+// 结构体也可以用泛型  例如：
+// struct Point<T> {
+//     x: T,
+//     y: T
+// }
+// // 甚至可以结构体内部使用不同类型:
+// struct Point1<T, U> {
+//     x: T,
+//     y: U
+// }
+// fn main() {
+//     let point = Point {
+//         x: 11,
+//         y: 22
+//     };
+//     let point1 = Point1 {
+//         x: 11,
+//         y: 22.2
+//     };
+// }
+
+// 方法中使用泛型
+// struct Point<T> {
+//     x: T,
+//     y: T
+// }
+// // 注意这里 "Point<T>" 已经不再表示泛型，而是代表结构体 Point<T>  不代表 Point 类型
+// // 写法上你不能写为  impl<T> Point {}
+// // impl后面跟<T> 才是表示泛型
+// // 语法 impl<泛型> 结构体 {}   这么写你应该懂了吧
+// impl<T> Point<T> {
+//     // 定义一个get方法
+//     fn x(&self) -> &T {
+//         &self.x
+//     }
+// }
+// fn main() {
+//     let point = Point {
+//         x: 22,
+//         y: 33
+//     };
+//     println!("获取point的x的值: {}", point.x());
+// }
+
+// 泛型方法
+// #[derive(Debug)]
+// struct Point<T, U> {
+//     x: T,
+//     y: U,
+// }
+// impl<T, U> Point<T, U> {
+//     // self 没加 &  代表不是引用 它可以move到mixup方法里面去了 以后再次调用实例的话将会报错
+//     fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
+//         Point {
+//             x: self.x,
+//             y: other.y,
+//         }
+//     }
+// }
+// fn main() {
+//     let point = Point { x: 23, y: 32.5 };
+//     let mixed = point.mixup(Point { x: 22, y: 44.3 });
+//     println!("混合后{:?}", mixed)
+// }
+
+// 可以使用具体的泛型类型实现方法
+// struct Point<T> {
+//     x: T,
+//     y: T
+// }
+// impl Point<u32> {
+//     fn distance_from_origin(&self) -> u32 {
+//         (self.x.pow(2) + self.y.pow(2))
+//     }
+// }
+// fn main() {
+//     let point: Point<u32> = Point {
+//         x: 22,
+//         y: 33
+//     };
+//     let result = point.distance_from_origin();
+//     let point1: Point<i32> = Point {
+//         x: 33,
+//         y: 33
+//     };
+//     // 报错：因为point1 的类型不是u32 而是i32 不能调用distance_from_origin方法
+//     // let result2 = point1.distance_from_origin();
+// }
+
+// 枚举中的泛型 prelude里面
+// enum Option<T> {
+//     Some(T),
+//     None
+// }
+// 还有 Result
+// enum Result<T, E> {
+//     Ok(T),
+//     Err(E)
+// }
+
+// 值的泛型 const  例如可以对数组的长度做泛型
+fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) {
+    println!("arr {:?}", arr);
+}
+
+fn main() {
+    let arr = [1,2,3];
+    display_array(arr);
+    let arr = [1,2];
+    display_array(arr);
+}
