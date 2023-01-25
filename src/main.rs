@@ -936,13 +936,52 @@
 // }
 
 // 值的泛型 const  例如可以对数组的长度做泛型
-fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) {
-    println!("arr {:?}", arr);
-}
+// fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) {
+//     println!("arr {:?}", arr);
+// }
+
+// fn main() {
+//     let arr = [1,2,3];
+//     display_array(arr);
+//     let arr = [1,2];
+//     display_array(arr);
+// }
+
+// Vec 动态数组
+// fn main() {
+//     // 创建一个vec  相当于我们js的 let arr = new Array()
+//     let mut v = Vec::new();
+//     // 改变vec数组 同样需要添加 mut
+//     v.push(1);
+//     // 也可以使用vec!宏来创建动态数组并且可以同时初始化
+//     let a = vec![1, 2, 3, 4];
+//     // 读取 数组中的元素有两种方法：索引和get()   不过get返回的是Option<T> 需要使用match解构
+//     let mut three = &a[2];
+//     three = &4;
+//     println!("three: {} vec: {:?}", three, a);
+
+//     let mut fours: &i32;
+
+//     let four = a.get(3).expect("无法读取");
+//     fours = four;
+
+//     // match four {
+//     //     Some(x) => {
+//     //         fours = x;
+//     //         println!("four: {}", x)
+//     //     },
+//     //     None => println!("None")
+//     // }
+//     println!("fours: {}", fours);
+// }
 
 fn main() {
-    let arr = [1,2,3];
-    display_array(arr);
-    let arr = [1,2];
-    display_array(arr);
+    // 这段代码会报错：原因是 first引用的是旧数组，而v.push() 之后，旧数组需要拓展出6，就会重新开辟一段空间把旧数组拷贝过来形成一个新数组。
+    // 结果最后使用first之后，first还是指向的旧数组，一个不存在的引用，就会报错。
+    // 解决方法就是：把& 去掉 let first = &v[0] 换成 let first = v[0]
+    let mut v = vec![1, 2, 3, 4, 5];
+    let first = &v[0];
+    // TODO：可以把这段放开看看报错效果
+    // v.push(6);
+    println!("first: {}", first)
 }
