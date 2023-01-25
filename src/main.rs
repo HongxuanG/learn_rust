@@ -975,13 +975,31 @@
 //     println!("fours: {}", fours);
 // }
 
+// fn main() {
+//     // 这段代码会报错：原因是 first引用的是旧数组，而v.push() 之后，旧数组需要拓展出6，就会重新开辟一段空间把旧数组拷贝过来形成一个新数组。
+//     // 结果最后使用first之后，first还是指向的旧数组，一个不存在的引用，就会报错。
+//     // 解决方法就是：把& 去掉 let first = &v[0] 换成 let first = v[0]
+//     let mut v = vec![1, 2, 3, 4, 5];
+//     let first = &v[0];
+//     // TODO：可以把这段放开看看报错效果
+//     // v.push(6);
+//     println!("first: {}", first)
+// }
+
+// Vector可不可以存储不同类型的元素呢？答案是不行的。只能存储相同类型的元素
+// 但是你可以借助 Vector + Enumerable 枚举进行存储 这样就相当于存储了相同类型的枚举的动态数组了
+#[derive(Debug)]
+enum IpAddr {
+    V4(String),
+    V6(String)
+}
 fn main() {
-    // 这段代码会报错：原因是 first引用的是旧数组，而v.push() 之后，旧数组需要拓展出6，就会重新开辟一段空间把旧数组拷贝过来形成一个新数组。
-    // 结果最后使用first之后，first还是指向的旧数组，一个不存在的引用，就会报错。
-    // 解决方法就是：把& 去掉 let first = &v[0] 换成 let first = v[0]
-    let mut v = vec![1, 2, 3, 4, 5];
-    let first = &v[0];
-    // TODO：可以把这段放开看看报错效果
-    // v.push(6);
-    println!("first: {}", first)
+    // 这样写就相当于vec 存储了两种类型的元素  但是这两种类型的元素又是同一种枚举
+    let v = vec![
+        IpAddr::V4("V4".to_string()),
+        IpAddr::V6("V6".to_string())
+    ];
+    for i in v {
+        println!("ip: {:?}", i);
+    }
 }
