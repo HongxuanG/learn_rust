@@ -988,18 +988,34 @@
 
 // Vector可不可以存储不同类型的元素呢？答案是不行的。只能存储相同类型的元素
 // 但是你可以借助 Vector + Enumerable 枚举进行存储 这样就相当于存储了相同类型的枚举的动态数组了
-#[derive(Debug)]
-enum IpAddr {
-    V4(String),
-    V6(String)
-}
+// #[derive(Debug)]
+// enum IpAddr {
+//     V4(String),
+//     V6(String)
+// }
+// fn main() {
+//     // 这样写就相当于vec 存储了两种类型的元素  但是这两种类型的元素又是同一种枚举
+//     let v = vec![
+//         IpAddr::V4("V4".to_string()),
+//         IpAddr::V6("V6".to_string())
+//     ];
+//     for i in v {
+//         println!("ip: {:?}", i);
+//     }
+// }
+
+// 注意： world_hello 是我们项目里面 Cargo.toml 的name的属性值
+use world_hello::NewArticle;
+use world_hello::Summary;
+
 fn main() {
-    // 这样写就相当于vec 存储了两种类型的元素  但是这两种类型的元素又是同一种枚举
-    let v = vec![
-        IpAddr::V4("V4".to_string()),
-        IpAddr::V6("V6".to_string())
-    ];
-    for i in v {
-        println!("ip: {:?}", i);
-    }
+    let new_article = NewArticle {
+        headline: String::from("页头"),
+        location: String::from("位置"),
+        author: String::from("作者"),
+        content: String::from("上下文")
+    };
+    println!("new_article {}", new_article.summarize());
+    println!("new_article {}", new_article.summarize_default())
+    
 }
