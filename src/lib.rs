@@ -62,6 +62,34 @@ impl Summary for Tweet {
 
 // 特征约束： 可以使用特征作为函数的参数类型
 // 只有实现了 Summary 这个特征的参数才能传进来  String 或者 &str 都不行，NewArticle 或者 Tweet 就可以
-pub fn notify(item: &impl Summary) {
+// pub fn notify(item: &impl Summary) {
+//     println!("breaking news! {}", item.summarize())
+// }
+// 上面的代码也可以写成这样，更加简洁  T 类型需要一个实现了 Summary 特征的类型
+// pub fn notify<T: Summary>(item: &T) {
+//   println!("breaking news! {}", item.summarize())
+// }
+// pub fn notify<T: Summary>(item1: &T, item2: &T) {
+//   println!("breaking news! {}", item1.summarize())
+// }
+
+// 多重约束
+// 我们想让入参 即实现了 Summary 特征也实现了 Display 特征  怎么约束呢？
+use std::fmt::Debug;
+use std::fmt::Display;
+// 只有实现了 Summary 和 Display 特征的item才能作为入参传进去，不然报错
+// pub fn notify(item: &(impl Summary + Display)) {
+//     println!("breaking news! {}", item.summarize())
+// }
+// 也可以这样写
+pub fn notify<T: Summary + Display>(item: &T) {
     println!("breaking news! {}", item.summarize())
+}
+
+// where 语法可以让我们 一些复杂的特征约束变得可读
+pub fn some_function<T, U>(t: T, u: U)
+where
+    T: Summary + Display,
+    U: Clone + Debug,
+{
 }
