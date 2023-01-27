@@ -1005,9 +1005,25 @@
 // }
 
 // 注意： world_hello 是我们项目里面 Cargo.toml 的name的属性值
-use world_hello::NewArticle;
-use world_hello::Summary;
+// use world_hello::NewArticle;
+// use world_hello::Summary;
 
+// fn main() {
+//     let new_article = NewArticle {
+//         headline: String::from("页头"),
+//         location: String::from("位置"),
+//         author: String::from("作者"),
+//         content: String::from("上下文")
+//     };
+//     println!("new_article {}", new_article.summarize());
+//     println!("new_article {}", new_article.summarize_default())
+    
+// }
+
+use world_hello::notify;
+use world_hello::NewArticle;
+
+// 特征约束
 fn main() {
     let new_article = NewArticle {
         headline: String::from("页头"),
@@ -1015,7 +1031,8 @@ fn main() {
         author: String::from("作者"),
         content: String::from("上下文")
     };
-    println!("new_article {}", new_article.summarize());
-    println!("new_article {}", new_article.summarize_default())
-    
+    notify(&new_article);
+    let str = "String";
+    // 会报错：因为str没有实现 Summary 特征
+    // notify(str);
 }

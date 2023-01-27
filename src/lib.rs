@@ -27,11 +27,10 @@ pub fn eat_at_restaurant() {
 // 特征好像其他语言的抽象类 可以提供具体实现也可以不提供具体实现
 // 加上 pub 使私有变成公有，外部使用use 关键字能够联想到lib.rs被公开的特征或者方法函数
 pub trait Summary {
-
     fn summarize(&self) -> String;
     // 默认实现  也可以自己实现
     fn summarize_default(&self) -> String {
-      format!("Summary 特征的默认实现, {}", self.summarize())
+        format!("Summary 特征的默认实现, {}", self.summarize())
     }
 }
 pub struct NewArticle {
@@ -59,4 +58,10 @@ impl Summary for Tweet {
     fn summarize(&self) -> String {
         format!("{}: {}", self.username, self.content)
     }
+}
+
+// 特征约束： 可以使用特征作为函数的参数类型
+// 只有实现了 Summary 这个特征的参数才能传进来  String 或者 &str 都不行，NewArticle 或者 Tweet 就可以
+pub fn notify(item: &impl Summary) {
+    println!("breaking news! {}", item.summarize())
 }
