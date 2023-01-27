@@ -93,3 +93,25 @@ where
     U: Clone + Debug,
 {
 }
+
+// 想让指定的实现了某个特征的类型拥有一些方法怎么办呢?
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+// 这里的Self指的是 Pair<T>
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+// 实现一个方法，只有实现了 Display 和 PartialOrd 特征的 T 类型才能使用这个方法
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("最大的数是: x {}", self.x)
+        } else {
+            println!("最大的数是: y {}", self.y)
+        }
+    }
+}
