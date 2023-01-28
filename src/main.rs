@@ -1020,19 +1020,57 @@
     
 // }
 
-use world_hello::notify;
-use world_hello::NewArticle;
+// use world_hello::notify;
+// use world_hello::NewArticle;
 
-// 特征约束
+// // 特征约束
+// fn main() {
+//     let new_article = NewArticle {
+//         headline: String::from("页头"),
+//         location: String::from("位置"),
+//         author: String::from("作者"),
+//         content: String::from("上下文")
+//     };
+//     notify(&new_article);
+//     let str = "String";
+//     // 会报错：因为str没有实现 Summary 特征
+//     // notify(str);
+// }
+
+use std::ops::Add;
+
+// 为自定义类型实现 加 操作
+#[derive(Debug)]
+struct Point<T: Add<T, Output = T>> {
+    x: T,
+    y: T
+}
+impl<T: Add<T, Output = T>> Add for Point<T> {
+    type Output = Point<T>;
+    fn add(self, p: Self) -> Self {
+        Point { x: self.x + p.x, y: self.y + p.y }
+    }
+}
+fn add<T: Add<T, Output = T>>(a: T, b: T) -> T {
+    a + b
+}
 fn main() {
-    let new_article = NewArticle {
-        headline: String::from("页头"),
-        location: String::from("位置"),
-        author: String::from("作者"),
-        content: String::from("上下文")
+    let p1 = Point {
+        x: 1,
+        y: 2
     };
-    notify(&new_article);
-    let str = "String";
-    // 会报错：因为str没有实现 Summary 特征
-    // notify(str);
+    let p2 = Point {
+        x: 3,
+        y: 4
+    };
+    let p3 = Point {
+        x: 1,
+        y: 2
+    };
+    let p4 = Point {
+        x: 3,
+        y: 4
+    };
+    println!("p1 + p2 = {:?}", add(p1, p2));
+    println!("p3 + p4 = {:?}", p3 + p4);
 }
