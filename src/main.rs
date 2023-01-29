@@ -1075,45 +1075,116 @@
 //     println!("p3 + p4 = {:?}", p3 + p4);
 // }
 
-use std::fmt::{Display, self};
+// use std::fmt::{Display, self};
 
-#[derive(Debug)]
-enum FileState {
-    Open,
-    Close
+// #[derive(Debug)]
+// enum FileState {
+//     Open,
+//     Close
+// }
+// impl Display for FileState {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Self::Close => write!(f, "Close"),
+//             Self::Open => write!(f, "Open")
+//         }
+//     }
+// }
+// #[derive(Debug)]
+// struct File {
+//     name: String,
+//     data: Vec<u8>,
+//     state: FileState
+// }
+// impl Display for File {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "<{}, {}>", self.name, self.state)
+//     }
+// }
+// impl File {
+//     fn new(name: &str) -> File {
+//         File {
+//             name: String::from(name),
+//             data: Vec::new(),
+//             state: FileState::Close
+//         }
+//     }
+// }
+// fn main() {
+//     let file = File::new("file.txt");
+//     // 这里没有报错 因为 File 实现 Debug 特征
+//     println!("打印文件 {:?}", file);
+//     // 这里报错说：没有 File 实现Display特征
+//     println!("打印文件 {}", file)
+// }
+
+
+// 特征对象
+// 特征对象解决了什么问题？函数返回特征类型的时候 我们只能返回一种类型，而特征对象让我们可以返回多种类型
+// 也许你会想到利用之前说的枚举类型，但这样太麻烦了你需要先定义好枚举具体有什么
+// 像动态添加到arr里面有需要手动添加进枚举里面
+// enum FileState {
+//     Close,
+//     Open
+// }
+// let arr: Vec<FileState> = vec![
+//     FileState::Close,
+//     FileState::Open
+// ];
+
+// &dyn xxx    和   Box<dyn xxx>  是特征对象，可以解决这个这个问题
+
+trait Draw {
+    fn draw(&self) -> String;
 }
-impl Display for FileState {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::Close => write!(f, "Close"),
-            Self::Open => write!(f, "Open")
-        }
+struct Button {
+    width: u32,
+    height: u32,
+    label: String
+}
+impl Draw for Button {
+    fn draw(&self) -> String {
+        format!("Button")
     }
 }
-#[derive(Debug)]
-struct File {
-    name: String,
-    data: Vec<u8>,
-    state: FileState
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec<String>
 }
-impl Display for File {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "<{}, {}>", self.name, self.state)
+impl Draw for SelectBox {
+    fn draw(&self) -> String {
+        format!("SelectBox")
     }
 }
-impl File {
-    fn new(name: &str) -> File {
-        File {
-            name: String::from(name),
-            data: Vec::new(),
-            state: FileState::Close
+struct Screen {
+    components: Vec<Box<dyn Draw>>
+}
+impl Screen {
+    fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
         }
     }
 }
 fn main() {
-    let file = File::new("file.txt");
-    // 这里没有报错 因为 File 实现 Debug 特征
-    println!("打印文件 {:?}", file);
-    // 这里报错说：没有 File 实现Display特征
-    println!("打印文件 {}", file)
+    let screen = Screen {
+        components: vec![
+            Box::new(Button {
+                width: 100,
+                height: 100,
+                label: String::from("sss")
+            }),
+            Box::new(SelectBox {
+                width: 200,
+                height: 200,
+                options: vec![
+                    String::from("Yes"),
+                    String::from("Maybe"),
+                    String::from("No")
+                ]
+            })
+        ]
+    };
+    screen.run()
 }
