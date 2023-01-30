@@ -1134,57 +1134,133 @@
 
 // &dyn xxx    和   Box<dyn xxx>  是特征对象，可以解决这个这个问题
 
-trait Draw {
-    fn draw(&self) -> String;
-}
-struct Button {
-    width: u32,
-    height: u32,
-    label: String
-}
-impl Draw for Button {
-    fn draw(&self) -> String {
-        format!("Button")
-    }
-}
-struct SelectBox {
-    width: u32,
-    height: u32,
-    options: Vec<String>
-}
-impl Draw for SelectBox {
-    fn draw(&self) -> String {
-        format!("SelectBox")
-    }
-}
-struct Screen {
-    components: Vec<Box<dyn Draw>>
-}
-impl Screen {
-    fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+// trait Draw {
+//     fn draw(&self) -> String;
+// }
+// struct Button {
+//     width: u32,
+//     height: u32,
+//     label: String
+// }
+// impl Draw for Button {
+//     fn draw(&self) -> String {
+//         format!("Button")
+//     }
+// }
+// struct SelectBox {
+//     width: u32,
+//     height: u32,
+//     options: Vec<String>
+// }
+// impl Draw for SelectBox {
+//     fn draw(&self) -> String {
+//         format!("SelectBox")
+//     }
+// }
+// struct Screen {
+//     components: Vec<Box<dyn Draw>>
+// }
+// impl Screen {
+//     fn run(&self) {
+//         for component in self.components.iter() {
+//             component.draw();
+//         }
+//     }
+// }
+// fn main() {
+//     let screen = Screen {
+//         components: vec![
+//             Box::new(Button {
+//                 width: 100,
+//                 height: 100,
+//                 label: String::from("sss")
+//             }),
+//             Box::new(SelectBox {
+//                 width: 200,
+//                 height: 200,
+//                 options: vec![
+//                     String::from("Yes"),
+//                     String::from("Maybe"),
+//                     String::from("No")
+//                 ]
+//             })
+//         ]
+//     };
+//     screen.run()
+// }
+
+
+// HashMap  
+// 创建 HashMap   key-value   就好像js的对象 一样  每个键对应一个值
+// HashMap的key 只能使用实现了 Eq 和 Hash 特征的类型：bool    int   uint   String   &str  此外 f32 和 f64 由于浮点数精度的问题无法相等比较 所以没有实现Hash特征
+use std::collections::HashMap;
+
 fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(Button {
-                width: 100,
-                height: 100,
-                label: String::from("sss")
-            }),
-            Box::new(SelectBox {
-                width: 200,
-                height: 200,
-                options: vec![
-                    String::from("Yes"),
-                    String::from("Maybe"),
-                    String::from("No")
-                ]
-            })
-        ]
-    };
-    screen.run()
+    // 创建HashMap用 HashMap::new()
+    let mut hash = HashMap::new();
+    hash.insert("红宝石", 1);
+    hash.insert("蓝宝石", 2);
+    hash.insert("假宝石", 3);
+
+    // 如何将Vec 转成 HashMap
+    let arr = vec![
+        ("中国队".to_string(), 100),
+        ("美国队".to_string(), 20),
+        ("日本队".to_string(), 40)
+    ];
+    let map: HashMap<_, _> = arr.into_iter().collect();
+    println!("{:?}", map);
+
+
+    // 查询
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 1);
+    scores.insert(String::from("Yellow"), 2);
+
+    let target_team = String::from("Blue");
+
+    let team_name = scores.get(&target_team);
+    println!("team name: {}", team_name.expect("team_name不存在"));
+
+    // 循环
+    for (key, value) in &scores {
+        println!("key: {}, value: {}", key, value);
+    }
+    println!("scores: {:?}", scores);
+
+
+    // 更新
+    let mut scores1 = HashMap::new();
+    scores1.insert("blue", 1);
+    scores1.insert("yellow", 2);
+    // 如果key存在，更新上去，然后返回旧值
+    let old = scores1.insert("blue", 4);
+    assert_eq!(old, Some(1));
+    let new = scores1.get("blue");
+    assert_eq!(new, Some(&4));
+    let a = scores1["blue"];
+    println!("字面量获取map的值 {}", a);
+    // or_insert 入参代表默认值，如果entry查找不到key 则插入默认值
+    let v = scores1.entry("green").or_insert(5);
+    assert_eq!(*v, 5);
+    // 查找到 green 存在并且值是 5
+    let v = scores1.entry("green").or_insert(50);
+    // 结果还是5
+    assert_eq!(*v, 5);
+
+
+    // 例子：查询词语出现的次数
+    let text = "hello world wonderful world";
+    let mut map = HashMap::new();
+    for word in text.split_whitespace() {
+        // 返回的是可变引用，所以下面可以直接修改 count 的次数
+        // let count = map.entry(word).or_insert(0);
+        // 还能使用函数返回新的值  or_insert_with 入参是一个函数  函数的返回值就是插入的默认值
+        let count = map.entry(word).or_insert_with(random_stat_buff);
+        *count += 1
+    }
+    println!("词语的次数: {:?}", map);
+}
+fn random_stat_buff() -> u8 {
+    1
 }
