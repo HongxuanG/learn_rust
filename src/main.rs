@@ -1017,7 +1017,7 @@
 //     };
 //     println!("new_article {}", new_article.summarize());
 //     println!("new_article {}", new_article.summarize_default())
-    
+
 // }
 
 // use world_hello::notify;
@@ -1118,7 +1118,6 @@
 //     println!("打印文件 {}", file)
 // }
 
-
 // 特征对象
 // 特征对象解决了什么问题？函数返回特征类型的时候 我们只能返回一种类型，而特征对象让我们可以返回多种类型
 // 也许你会想到利用之前说的枚举类型，但这样太麻烦了你需要先定义好枚举具体有什么
@@ -1189,78 +1188,116 @@
 //     screen.run()
 // }
 
-
-// HashMap  
+// HashMap
 // 创建 HashMap   key-value   就好像js的对象 一样  每个键对应一个值
 // HashMap的key 只能使用实现了 Eq 和 Hash 特征的类型：bool    int   uint   String   &str  此外 f32 和 f64 由于浮点数精度的问题无法相等比较 所以没有实现Hash特征
-use std::collections::HashMap;
+// use std::collections::HashMap;
 
-fn main() {
-    // 创建HashMap用 HashMap::new()
-    let mut hash = HashMap::new();
-    hash.insert("红宝石", 1);
-    hash.insert("蓝宝石", 2);
-    hash.insert("假宝石", 3);
+// fn main() {
+//     // 创建HashMap用 HashMap::new()
+//     let mut hash = HashMap::new();
+//     hash.insert("红宝石", 1);
+//     hash.insert("蓝宝石", 2);
+//     hash.insert("假宝石", 3);
 
-    // 如何将Vec 转成 HashMap
-    let arr = vec![
-        ("中国队".to_string(), 100),
-        ("美国队".to_string(), 20),
-        ("日本队".to_string(), 40)
-    ];
-    let map: HashMap<_, _> = arr.into_iter().collect();
-    println!("{:?}", map);
+//     // 如何将Vec 转成 HashMap
+//     let arr = vec![
+//         ("中国队".to_string(), 100),
+//         ("美国队".to_string(), 20),
+//         ("日本队".to_string(), 40)
+//     ];
+//     let map: HashMap<_, _> = arr.into_iter().collect();
+//     println!("{:?}", map);
 
+//     // 查询
+//     let mut scores = HashMap::new();
+//     scores.insert(String::from("Blue"), 1);
+//     scores.insert(String::from("Yellow"), 2);
 
-    // 查询
-    let mut scores = HashMap::new();
-    scores.insert(String::from("Blue"), 1);
-    scores.insert(String::from("Yellow"), 2);
+//     let target_team = String::from("Blue");
 
-    let target_team = String::from("Blue");
+//     let team_name = scores.get(&target_team);
+//     println!("team name: {}", team_name.expect("team_name不存在"));
 
-    let team_name = scores.get(&target_team);
-    println!("team name: {}", team_name.expect("team_name不存在"));
+//     // 循环
+//     for (key, value) in &scores {
+//         println!("key: {}, value: {}", key, value);
+//     }
+//     println!("scores: {:?}", scores);
 
-    // 循环
-    for (key, value) in &scores {
-        println!("key: {}, value: {}", key, value);
-    }
-    println!("scores: {:?}", scores);
+//     // 更新
+//     let mut scores1 = HashMap::new();
+//     scores1.insert("blue", 1);
+//     scores1.insert("yellow", 2);
+//     // 如果key存在，更新上去，然后返回旧值
+//     let old = scores1.insert("blue", 4);
+//     assert_eq!(old, Some(1));
+//     let new = scores1.get("blue");
+//     assert_eq!(new, Some(&4));
+//     let a = scores1["blue"];
+//     println!("字面量获取map的值 {}", a);
+//     // or_insert 入参代表默认值，如果entry查找不到key 则插入默认值
+//     let v = scores1.entry("green").or_insert(5);
+//     assert_eq!(*v, 5);
+//     // 查找到 green 存在并且值是 5
+//     let v = scores1.entry("green").or_insert(50);
+//     // 结果还是5
+//     assert_eq!(*v, 5);
 
+//     // 例子：查询词语出现的次数
+//     let text = "hello world wonderful world";
+//     let mut map = HashMap::new();
+//     for word in text.split_whitespace() {
+//         // 返回的是可变引用，所以下面可以直接修改 count 的次数
+//         // let count = map.entry(word).or_insert(0);
+//         // 还能使用函数返回新的值  or_insert_with 入参是一个函数  函数的返回值就是插入的默认值
+//         let count = map.entry(word).or_insert_with(random_stat_buff);
+//         *count += 1
+//     }
+//     println!("词语的次数: {:?}", map);
+// }
+// fn random_stat_buff() -> u8 {
+//     1
+// }
 
-    // 更新
-    let mut scores1 = HashMap::new();
-    scores1.insert("blue", 1);
-    scores1.insert("yellow", 2);
-    // 如果key存在，更新上去，然后返回旧值
-    let old = scores1.insert("blue", 4);
-    assert_eq!(old, Some(1));
-    let new = scores1.get("blue");
-    assert_eq!(new, Some(&4));
-    let a = scores1["blue"];
-    println!("字面量获取map的值 {}", a);
-    // or_insert 入参代表默认值，如果entry查找不到key 则插入默认值
-    let v = scores1.entry("green").or_insert(5);
-    assert_eq!(*v, 5);
-    // 查找到 green 存在并且值是 5
-    let v = scores1.entry("green").or_insert(50);
-    // 结果还是5
-    assert_eq!(*v, 5);
-
-
-    // 例子：查询词语出现的次数
-    let text = "hello world wonderful world";
-    let mut map = HashMap::new();
-    for word in text.split_whitespace() {
-        // 返回的是可变引用，所以下面可以直接修改 count 的次数
-        // let count = map.entry(word).or_insert(0);
-        // 还能使用函数返回新的值  or_insert_with 入参是一个函数  函数的返回值就是插入的默认值
-        let count = map.entry(word).or_insert_with(random_stat_buff);
-        *count += 1
-    }
-    println!("词语的次数: {:?}", map);
+// 类型转换用 as
+// 类型转换  只能范围小的转大的  因为会产生意想不到的结果  例如：
+fn error_transition() {
+    let error300 = 300_i32 as i8;
+    // i8 类型最大值就是127  300 > 127   属于大范围转小范围  数据可能会出错
+    // 超出范围的值就会从0开始继续计算
+    println!("转换后的300真的是300吗？：{}", error300); // 44
 }
-fn random_stat_buff() -> u8 {
-    1
+fn main() {
+    error_transition();
+    let i8_max = i8::MAX;
+    let i8_min = i8::MIN;
+    println!("i8 最大的值是： {}", i8_max); // 127
+    println!("i8 最小的值是： {}", i8_min); // -128
+    let u8_min = u8::MIN;
+    println!("u8 最小的值是： {}", u8_min); // 0
+
+    // 常用的转换
+    let a = 3.1 as i8; // 3
+    let b = 100_i8 as i32; // 100
+    let c = 'a' as u8; // 字符转成整数那就是  a 对应 97   asci 码
+
+    // 打印看看
+    println!("a: {}, b: {}, c: {}", a, b, c);
+
+    // 内存地址转换为指针
+    let mut values: [i32; 2] = [1, 2];
+    // Returns an unsafe mutable pointer  返回一个不安全的可变指针
+    let p1 = values.as_mut_ptr();
+    println!("p1: {:?}", p1);   // 0x6619affae0
+    let first_address = p1 as usize;
+    println!("first_address: {}", first_address);   // 438517627616
+    let second_address = first_address + 4;   // 4 == std::mem::size_of::<i32>()   i32 占用4字节
+    println!("second_address: {}", second_address);   // 438517627620
+    let p2 = second_address as *mut i32;
+    println!("p2: {:?}", p2);   // 0x6619affae4
+    unsafe {
+        *p2 += 1;
+    }
+    assert_eq!(values[1], 3);
 }
