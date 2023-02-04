@@ -1474,29 +1474,45 @@
 
 // 闭包的三种类型约束：转移所有权(FnOnce)、不可变借用(Fn)、可变借用(FnMut)
 // 1. 转移所有权
-fn func_once<F>(func: F)
-// FnOnce 顾名思义：只能被调用一次的闭包，但是可以通过某些手法解除这个限制  ==> Copy 特征
-    where F: FnOnce(usize) -> bool
-{
-    println!("{}", func(3));
-    // 报错：使用了两次func
-    // println!("{}", func(4));
-}
+// fn func_once<F>(func: F)
+// // FnOnce 顾名思义：只能被调用一次的闭包，但是可以通过某些手法解除这个限制  ==> Copy 特征
+//     where F: FnOnce(usize) -> bool
+// {
+//     println!("{}", func(3));
+//     // 报错：使用了两次func
+//     // println!("{}", func(4));
+// }
 
-fn func_once1<F>(func: F)
-// 只要同时实现了Copy这个特征，就不会转移所有权
-    where F: FnOnce(usize) -> bool + Copy
-{
-    println!("{}", func(3));
-    println!("{}", func(4));
-}
+// fn func_once1<F>(func: F)
+// // 只要同时实现了Copy这个特征，就不会转移所有权
+//     where F: FnOnce(usize) -> bool + Copy
+// {
+//     println!("{}", func(3));
+//     println!("{}", func(4));
+// }
 
+// fn main() {
+//     let x = vec![1,2,3];
+//     func_once(|z| z == x.len());
+//     func_once1(|z| z == x.len())
+// }
+
+
+// 2. 可变借用
+// fn main() {
+//     let mut str = String::new();
+//     let mut update_string = |x| str.push_str(x);
+//     update_string("hello");
+//     println!("{}", str);
+// }
+
+// 不加mut就是另一种写法了：
 fn main() {
-    let x = vec![1,2,3];
-    func_once(|z| z == x.len());
-    func_once1(|z| z == x.len())
+    let mut str = String::new();
+    let update_string = |x| str.push_str(x);
+    exec(update_string);
+    println!("{}", str)
 }
-
-
-// 2. 不可变借用
-
+fn exec<'a, F: FnMut(&'a str)>(mut func: F) {  // 在入参约束上加mut 代表可变借用
+    func("hello")
+}
