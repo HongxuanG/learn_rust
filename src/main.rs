@@ -1440,31 +1440,63 @@
 // }
 
 // 下面这样写就实现了 多态 不仅限于u32 这个类型
-struct Cacher<T, U>
-    where 
-        T: Fn(U) -> U,
-        U: Copy
+// struct Cacher<T, U>
+//     where 
+//         T: Fn(U) -> U,
+//         U: Copy
+// {
+//     query: T,
+//     value: Option<U>,
+// }
+// impl<T, U> Cacher<T, U>
+//     where 
+//         T: Fn(U) -> U,
+//         U: Copy
+// {
+//     fn new(query: T) -> Cacher<T, U> {
+//         Cacher { query, value: None }
+//     }
+//     fn value(&mut self, arg: U) -> U {
+//         match self.value {
+//             Some(v) => v,
+//             None => {
+//                 let v = (self.query)(arg);
+//                 self.value = Some(v);
+//                 v
+//             }
+//         }
+//     }
+// }
+// fn main() {}
+
+// 闭包和函数很相似，但是有一些地方还是不同的
+// 比如：闭包能在内部访问外部的变量，而函数不能在函数体内部访问外部的变量
+
+// 闭包的三种类型约束：转移所有权(FnOnce)、不可变借用(Fn)、可变借用(FnMut)
+// 1. 转移所有权
+fn func_once<F>(func: F)
+// FnOnce 顾名思义：只能被调用一次的闭包，但是可以通过某些手法解除这个限制  ==> Copy 特征
+    where F: FnOnce(usize) -> bool
 {
-    query: T,
-    value: Option<U>,
+    println!("{}", func(3));
+    // 报错：使用了两次func
+    // println!("{}", func(4));
 }
-impl<T, U> Cacher<T, U>
-    where 
-        T: Fn(U) -> U,
-        U: Copy
+
+fn func_once1<F>(func: F)
+// 只要同时实现了Copy这个特征，就不会转移所有权
+    where F: FnOnce(usize) -> bool + Copy
 {
-    fn new(query: T) -> Cacher<T, U> {
-        Cacher { query, value: None }
-    }
-    fn value(&mut self, arg: U) -> U {
-        match self.value {
-            Some(v) => v,
-            None => {
-                let v = (self.query)(arg);
-                self.value = Some(v);
-                v
-            }
-        }
-    }
+    println!("{}", func(3));
+    println!("{}", func(4));
 }
-fn main() {}
+
+fn main() {
+    let x = vec![1,2,3];
+    func_once(|z| z == x.len());
+    func_once1(|z| z == x.len())
+}
+
+
+// 2. 不可变借用
+
