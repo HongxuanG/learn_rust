@@ -1394,12 +1394,77 @@
 // static 到底针对谁
 // 是针对引用本身 还是 针对引用所指的数据?
 // 答案是: 引用所指的数据
-fn main() {
-    {
-        let static_str = "我在只读内存里面";
-        println!("{}", static_str);
-        // 由于static_str 是 static  虽然引用不能再被使用了,但是数据还在 内存里面
-    }
-    // 下面的代码会报错: static_str已经离开所在的作用域了,引用会报错
-    // println!("static_str: {}", static_str);
+// fn main() {
+//     {
+//         let static_str = "我在只读内存里面";
+//         println!("{}", static_str);
+//         // 由于static_str 是 static  虽然引用不能再被使用了,但是数据还在 内存里面
+//     }
+//     // 下面的代码会报错: static_str已经离开所在的作用域了,引用会报错
+//     // println!("static_str: {}", static_str);
+// }
+
+
+
+// 闭包
+// fn main() {
+//     let example_closure = |x| x;
+//     // 当闭包没有标注类型的时候，第一次类型推导出什么类型，该闭包就是什么类型
+//     // 下面的example_closure推导出了String类型
+//     let s = example_closure(String::from("hello"));
+//     // 这里就不能用u32 类型
+//     // let n = example_closure(5);
+// }
+
+// 这是一个缓存存储器，下面是他的简单实现
+// 现在它只支持u32类型，如果想要String 类型的呢 ？
+// struct Cacher<T: Fn(u32) -> u32> {
+//     query: T,
+//     value: Option<u32>,
+// }
+
+// impl<T: Fn(u32) -> u32> Cacher<T> {
+//     fn new(query: T) -> Cacher<T> {
+//         Cacher { query, value: None }
+//     }
+//     fn value(&mut self, arg: u32) -> u32 {
+//         match self.value {
+//             Some(v) => v,
+//             None => {
+//                 let v = (self.query)(arg);
+//                 self.value = Some(v);
+//                 v
+//             }
+//         }
+//     }
+// }
+
+// 下面这样写就实现了 多态 不仅限于u32 这个类型
+struct Cacher<T, U>
+    where 
+        T: Fn(U) -> U,
+        U: Copy
+{
+    query: T,
+    value: Option<U>,
 }
+impl<T, U> Cacher<T, U>
+    where 
+        T: Fn(U) -> U,
+        U: Copy
+{
+    fn new(query: T) -> Cacher<T, U> {
+        Cacher { query, value: None }
+    }
+    fn value(&mut self, arg: U) -> U {
+        match self.value {
+            Some(v) => v,
+            None => {
+                let v = (self.query)(arg);
+                self.value = Some(v);
+                v
+            }
+        }
+    }
+}
+fn main() {}
