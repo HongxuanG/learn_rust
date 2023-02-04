@@ -1359,33 +1359,47 @@
 
 // &'static 和 T: 'static
 
-use std::fmt::Display;
+// use std::fmt::Display;
 
+// fn main() {
+//     let r1;
+//     let r2;
+//     {
+//         static STATIC_EXAMPLE: i32 = 14;
+//         r1 = &STATIC_EXAMPLE;
+//         let x = "&'static str";
+//         r2 = x;
+//     }
+//     println!("'static i32: {}", r1);
+//     println!("'static str: {}", r2);
+
+//     let r3;
+//     {
+//         let s1 = "String".to_string();
+//         static_bound(&s1);
+//         // 如果反注释下面这一行代码，就会报错，s1是String类型，没有'static的生命周期，所以离开了这段代码块就会drop掉
+//         // 到时候r3将会变成悬垂指针：r3 引用的东西消失了
+//         // r3 = &s1
+//         r3 = s1
+//     }
+//     println!("r3: {}", r3);
+
+// }
+
+// fn static_bound<T: Display + 'static>(t: &T) {
+//     println!("{}", t)
+// }
+
+
+// static 到底针对谁
+// 是针对引用本身 还是 针对引用所指的数据?
+// 答案是: 引用所指的数据
 fn main() {
-    let r1;
-    let r2;
     {
-        static STATIC_EXAMPLE: i32 = 14;
-        r1 = &STATIC_EXAMPLE;
-        let x = "&'static str";
-        r2 = x;
+        let static_str = "我在只读内存里面";
+        println!("{}", static_str);
+        // 由于static_str 是 static  虽然引用不能再被使用了,但是数据还在 内存里面
     }
-    println!("'static i32: {}", r1);
-    println!("'static str: {}", r2);
-
-    let r3;
-    {
-        let s1 = "String".to_string();
-        static_bound(&s1);
-        // 如果反注释下面这一行代码，就会报错，s1是String类型，没有'static的生命周期，所以离开了这段代码块就会drop掉
-        // 到时候r3将会变成悬垂指针：r3 引用的东西消失了
-        // r3 = &s1
-        r3 = s1
-    }
-    println!("r3: {}", r3);
-
-}
-
-fn static_bound<T: Display + 'static>(t: &T) {
-    println!("{}", t)
+    // 下面的代码会报错: static_str已经离开所在的作用域了,引用会报错
+    // println!("static_str: {}", static_str);
 }
