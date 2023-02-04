@@ -1262,42 +1262,96 @@
 
 // 类型转换用 as
 // 类型转换  只能范围小的转大的  因为会产生意想不到的结果  例如：
-fn error_transition() {
-    let error300 = 300_i32 as i8;
-    // i8 类型最大值就是127  300 > 127   属于大范围转小范围  数据可能会出错
-    // 超出范围的值就会从0开始继续计算
-    println!("转换后的300真的是300吗？：{}", error300); // 44
-}
-fn main() {
-    error_transition();
-    let i8_max = i8::MAX;
-    let i8_min = i8::MIN;
-    println!("i8 最大的值是： {}", i8_max); // 127
-    println!("i8 最小的值是： {}", i8_min); // -128
-    let u8_min = u8::MIN;
-    println!("u8 最小的值是： {}", u8_min); // 0
+// fn error_transition() {
+//     let error300 = 300_i32 as i8;
+//     // i8 类型最大值就是127  300 > 127   属于大范围转小范围  数据可能会出错
+//     // 超出范围的值就会从0开始继续计算
+//     println!("转换后的300真的是300吗？：{}", error300); // 44
+// }
+// fn main() {
+//     error_transition();
+//     let i8_max = i8::MAX;
+//     let i8_min = i8::MIN;
+//     println!("i8 最大的值是： {}", i8_max); // 127
+//     println!("i8 最小的值是： {}", i8_min); // -128
+//     let u8_min = u8::MIN;
+//     println!("u8 最小的值是： {}", u8_min); // 0
 
-    // 常用的转换
-    let a = 3.1 as i8; // 3
-    let b = 100_i8 as i32; // 100
-    let c = 'a' as u8; // 字符转成整数那就是  a 对应 97   asci 码
+//     // 常用的转换
+//     let a = 3.1 as i8; // 3
+//     let b = 100_i8 as i32; // 100
+//     let c = 'a' as u8; // 字符转成整数那就是  a 对应 97   asci 码
 
-    // 打印看看
-    println!("a: {}, b: {}, c: {}", a, b, c);
+//     // 打印看看
+//     println!("a: {}, b: {}, c: {}", a, b, c);
 
-    // 内存地址转换为指针
-    let mut values: [i32; 2] = [1, 2];
-    // Returns an unsafe mutable pointer  返回一个不安全的可变指针
-    let p1 = values.as_mut_ptr();
-    println!("p1: {:?}", p1);   // 0x6619affae0
-    let first_address = p1 as usize;
-    println!("first_address: {}", first_address);   // 438517627616
-    let second_address = first_address + 4;   // 4 == std::mem::size_of::<i32>()   i32 占用4字节
-    println!("second_address: {}", second_address);   // 438517627620
-    let p2 = second_address as *mut i32;
-    println!("p2: {:?}", p2);   // 0x6619affae4
-    unsafe {
-        *p2 += 1;
+//     // 内存地址转换为指针
+//     let mut values: [i32; 2] = [1, 2];
+//     // Returns an unsafe mutable pointer  返回一个不安全的可变指针
+//     let p1 = values.as_mut_ptr();
+//     println!("p1: {:?}", p1);   // 0x6619affae0
+//     let first_address = p1 as usize;
+//     println!("first_address: {}", first_address);   // 438517627616
+//     let second_address = first_address + 4;   // 4 == std::mem::size_of::<i32>()   i32 占用4字节
+//     println!("second_address: {}", second_address);   // 438517627620
+//     let p2 = second_address as *mut i32;
+//     println!("p2: {:?}", p2);   // 0x6619affae4
+//     unsafe {
+//         *p2 += 1;
+//     }
+//     assert_eq!(values[1], 3);
+// }
+
+// rust 高级部分
+// 生命周期  'a 就是生命周期标注的写法
+// fn main() {
+//     let string1 = String::from("asdfasdf");
+//     let string2 = "asdfa";
+
+//     let result = longest(&string1.as_str(), string2);
+//     println!("result: {}", result)
+// }
+// 1. 每个引用都获得独自的生命周期
+// 2. 有且只有一个入参只有一个生命周期，返回值将会是这个生命周期
+// 3. 若存在多个输入生命周期，且其中一个是 &self 或 &mut self，则 &self 的生命周期被赋给所有的输出生命周期
+// fn longest<'a>(str1: &'a str, str2: &'a str) -> &'a str {
+//     if str1.len() > str2.len() {
+//         str1
+//     } else {
+//         str2
+//     }
+// }
+
+// fn error_longest<'a>(str1: &'a str, str2: &str) -> &'a str {
+//     str1
+// }
+
+// 认识方法的生命周期
+// struct ImportantExcerpt<'a> {
+//     part: &'a str
+// }
+// impl<'a> ImportantExcerpt<'a> {
+//     fn level(&self) -> i32 {
+//         3
+//     }
+// }
+
+// // 'a: 'b 指的是 a生命周期要和b生命周期活得一样久
+// impl<'a: 'b, 'b> ImportantExcerpt<'a> {
+//     fn announce_and_return_part(&'a self, announcement: &'static str) -> &'b str {
+//         self.part
+//     }
+// }
+// fn main(){}
+
+use std::fmt::Display;
+
+// 泛型和特征约束一起使用
+fn longest_with_an_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a str where T: Display {
+    if a.len() > b.len() {
+        a
+    }else{
+        b
     }
-    assert_eq!(values[1], 3);
 }
+fn main() {}
