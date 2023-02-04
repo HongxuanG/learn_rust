@@ -1344,14 +1344,48 @@
 // }
 // fn main(){}
 
-use std::fmt::Display;
 
 // 泛型和特征约束一起使用
-fn longest_with_an_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a str where T: Display {
-    if a.len() > b.len() {
-        a
-    }else{
-        b
+// use std::fmt::Display;
+// fn longest_with_an_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a str where T: Display {
+//     if a.len() > b.len() {
+//         a
+//     }else{
+//         b
+//     }
+// }
+// fn main() {}
+
+
+// &'static 和 T: 'static
+
+use std::fmt::Display;
+
+fn main() {
+    let r1;
+    let r2;
+    {
+        static STATIC_EXAMPLE: i32 = 14;
+        r1 = &STATIC_EXAMPLE;
+        let x = "&'static str";
+        r2 = x;
     }
+    println!("'static i32: {}", r1);
+    println!("'static str: {}", r2);
+
+    let r3;
+    {
+        let s1 = "String".to_string();
+        static_bound(&s1);
+        // 如果反注释下面这一行代码，就会报错，s1是String类型，没有'static的生命周期，所以离开了这段代码块就会drop掉
+        // 到时候r3将会变成悬垂指针：r3 引用的东西消失了
+        // r3 = &s1
+        r3 = s1
+    }
+    println!("r3: {}", r3);
+
 }
-fn main() {}
+
+fn static_bound<T: Display + 'static>(t: &T) {
+    println!("{}", t)
+}
