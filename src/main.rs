@@ -1507,12 +1507,24 @@
 // }
 
 // 不加mut就是另一种写法了：
+// fn main() {
+//     let mut str = String::new();
+//     let update_string = |x| str.push_str(x);
+//     exec(update_string);
+//     println!("{}", str)
+// }
+// fn exec<'a, F: FnMut(&'a str)>(mut func: F) {  // 在入参约束上加mut 代表可变借用
+//     func("hello")
+// }
+
+
+// 3. 不可变借用
 fn main() {
-    let mut str = String::new();
-    let update_string = |x| str.push_str(x);
+    let str = "hello".to_string();
+    let update_string = |x| println!("{}, {}", str, x);
     exec(update_string);
     println!("{}", str)
 }
-fn exec<'a, F: FnMut(&'a str)>(mut func: F) {  // 在入参约束上加mut 代表可变借用
-    func("hello")
+fn exec<F: Fn(String) -> ()>(func: F) {
+    func("world".to_string())
 }
